@@ -1,4 +1,5 @@
-﻿using BloggerSample.Application.Blogs.Queries.GetDetails;
+﻿using BloggerSample.Application.Blogs.Commands.Edit;
+using BloggerSample.Application.Blogs.Queries.GetDetails;
 using BloggerSample.Application.Common.Persistence;
 using BloggerSample.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,20 @@ namespace BloggerSample.Infrastructure.Repositories
         public void Add(Blog blog)
         {
             _blogs.Add(blog);
+        }
+
+        public async Task<int> Edit(
+            Guid id,
+            CancellationToken cancellationToken,
+            EditBlogDto editBlogDto)
+        {
+            var affectedRows = await _blogs
+                .Where(_ => _.Id == id && !_.IsDeleted)
+                .ExecuteUpdateAsync(_ => 
+                _.SetProperty(_ => _.Body, editBlogDto.body)
+                .SetProperty(_ => _.Title, editBlogDto.title), cancellationToken);
+
+            return affectedRows;
         }
 
         public async Task<GetBlogDetailsDto?> GetDetails(

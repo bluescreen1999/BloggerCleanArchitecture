@@ -1,9 +1,9 @@
 ﻿using BloggerSample.Application.Blogs.Queries.GetDetails;
+using BloggerSample.Application.Blogs.Commands.Edit;
 using BloggerSample.Application.Blogs.Commands.Add;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using BloggerSample.Domain.Entities;
 
 namespace BloggerSample.WebApi.Controllers
 {
@@ -34,6 +34,16 @@ namespace BloggerSample.WebApi.Controllers
         {
             var query = new GetBlogDetailsQuery() { Id = id };
             return Ok(await _mediator.Send(query, cancellationToken));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<bool>> Put(
+            [Required, FromRoute] Guid id,
+            [Required, FromBody] EditBlogDto dto,
+            CancellationToken cancellationToken)
+        {
+            var command = new EditBlogCommand() { EditBlogDto = dto, Id = id };
+            return await _mediator.Send(command, cancellationToken);
         }
     }
 }

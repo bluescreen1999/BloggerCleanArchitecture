@@ -1,10 +1,11 @@
-﻿using BloggerSample.Application.Blogs.Commands.Add;
+﻿using BloggerSample.Application.Blogs.Queries.GetDetails;
+using BloggerSample.Application.Blogs.Commands.Edit;
+using BloggerSample.Application.Blogs.Commands.Add;
 using BloggerSample.Application.Common.Behaviours;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
 using MediatR;
-using BloggerSample.Application.Blogs.Queries.GetDetails;
 
 namespace BloggerSample.Application
 {
@@ -31,6 +32,7 @@ namespace BloggerSample.Application
         {
             services.AddScoped<IAddBlogService, AddBlogService>();
             services.AddScoped<IGetBlogDetailsService, GetBlogDetailsService>();
+            services.AddScoped<IEditBlogService, EditBlogService>();
         }
     }
 }
