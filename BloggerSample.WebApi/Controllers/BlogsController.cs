@@ -1,4 +1,5 @@
 ﻿using BloggerSample.Application.Blogs.Queries.GetDetails;
+using BloggerSample.Application.Blogs.Commands.Delete;
 using BloggerSample.Application.Blogs.Commands.Edit;
 using BloggerSample.Application.Blogs.Commands.Add;
 using System.ComponentModel.DataAnnotations;
@@ -44,6 +45,16 @@ namespace BloggerSample.WebApi.Controllers
         {
             var command = new EditBlogCommand() { EditBlogDto = dto, Id = id };
             return await _mediator.Send(command, cancellationToken);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(
+            [Required, FromRoute] Guid id,
+            CancellationToken cancellationToken)
+        {
+            var command = new DeleteBlogCommand() { Id = id };
+            await _mediator.Send(command, cancellationToken);
+            return NoContent();
         }
     }
 }

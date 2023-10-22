@@ -25,7 +25,7 @@ namespace BloggerSample.Application.Blogs.Commands.Add
             AddBlogDto addBlogDto,
             CancellationToken cancellationToken)
         {
-            await GaurdAgainstDuplicateTitle(addBlogDto, cancellationToken);
+            await GuardAgainstDuplicateTitle(addBlogDto, cancellationToken);
 
             var currentDateTime = _dateTimeOffsetProvider.UtcNow;
             Blog blog = InitializeBlog(addBlogDto, currentDateTime);
@@ -37,7 +37,7 @@ namespace BloggerSample.Application.Blogs.Commands.Add
             return blog.Id;
         }
 
-        private async Task GaurdAgainstDuplicateTitle(
+        private async Task GuardAgainstDuplicateTitle(
             AddBlogDto addBlogDto,
             CancellationToken cancellationToken)
         {

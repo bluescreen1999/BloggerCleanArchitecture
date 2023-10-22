@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
 using MediatR;
+using BloggerSample.Application.Blogs.Commands.Delete;
 
 namespace BloggerSample.Application
 {
@@ -33,6 +34,7 @@ namespace BloggerSample.Application
             services.AddScoped<IAddBlogService, AddBlogService>();
             services.AddScoped<IGetBlogDetailsService, GetBlogDetailsService>();
             services.AddScoped<IEditBlogService, EditBlogService>();
+            services.AddScoped<IDeleteBlogService, DeleteBlogService>();
         }
     }
 }

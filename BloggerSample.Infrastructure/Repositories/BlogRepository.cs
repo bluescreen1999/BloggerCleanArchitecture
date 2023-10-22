@@ -1,5 +1,5 @@
-﻿using BloggerSample.Application.Blogs.Commands.Edit;
-using BloggerSample.Application.Blogs.Queries.GetDetails;
+﻿using BloggerSample.Application.Blogs.Queries.GetDetails;
+using BloggerSample.Application.Blogs.Commands.Edit;
 using BloggerSample.Application.Common.Persistence;
 using BloggerSample.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +18,15 @@ namespace BloggerSample.Infrastructure.Repositories
         public void Add(Blog blog)
         {
             _blogs.Add(blog);
+        }
+
+        public async Task<int> Delete(Guid id, CancellationToken cancellationToken)
+        {
+            var affectedRows = await _blogs
+                .Where(_ => _.Id == id && !_.IsDeleted)
+                .ExecuteUpdateAsync(_ => _.SetProperty(_ => _.IsDeleted, true), cancellationToken);
+
+            return affectedRows;
         }
 
         public async Task<int> Edit(
