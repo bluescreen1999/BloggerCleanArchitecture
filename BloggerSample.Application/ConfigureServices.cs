@@ -7,6 +7,7 @@ using System.Reflection;
 using FluentValidation;
 using MediatR;
 using BloggerSample.Application.Blogs.Commands.Delete;
+using BloggerSample.Application.Blogs.Queries.GetAll;
 
 namespace BloggerSample.Application
 {
@@ -35,6 +36,7 @@ namespace BloggerSample.Application
             services.AddScoped<IGetBlogDetailsService, GetBlogDetailsService>();
             services.AddScoped<IEditBlogService, EditBlogService>();
             services.AddScoped<IDeleteBlogService, DeleteBlogService>();
+            services.AddScoped<IGetAllBlogsService, GetAllBlogsService>();
         }
     }
 }

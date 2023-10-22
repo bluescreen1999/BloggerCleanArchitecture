@@ -1,6 +1,8 @@
 ﻿using BloggerSample.Application.Blogs.Queries.GetDetails;
+using BloggerSample.Application.Blogs.Queries.GetAll;
 using BloggerSample.Application.Blogs.Commands.Edit;
 using BloggerSample.Application.Common.Persistence;
+using BloggerSample.Application.Common.Models;
 using BloggerSample.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +26,8 @@ namespace BloggerSample.Infrastructure.Repositories
         {
             var affectedRows = await _blogs
                 .Where(_ => _.Id == id && !_.IsDeleted)
-                .ExecuteUpdateAsync(_ => _.SetProperty(_ => _.IsDeleted, true), cancellationToken);
+                .ExecuteUpdateAsync(_ => _.SetProperty(_ => _.IsDeleted, true),
+                cancellationToken);
 
             return affectedRows;
         }
@@ -38,9 +41,34 @@ namespace BloggerSample.Infrastructure.Repositories
                 .Where(_ => _.Id == id && !_.IsDeleted)
                 .ExecuteUpdateAsync(_ => 
                 _.SetProperty(_ => _.Body, editBlogDto.body)
-                .SetProperty(_ => _.Title, editBlogDto.title), cancellationToken);
+                .SetProperty(_ => _.Title, editBlogDto.title),
+                cancellationToken);
 
             return affectedRows;
+        }
+
+        public async Task<PagedList<GetAllBlogsDto>> GetAll(
+            PagingParams pagingParams,
+            GetAllBlogsFilterDto? filterDto,
+            CancellationToken cancellationToken)
+        {
+            var blogs = _blogs.Select(_ => new GetAllBlogsDto
+            {
+                Id = _.Id,
+                Title = _.Title,
+                Body = _.Body,
+                CreationDateTime = _.CreationDateTime,
+                IsDeleted = _.IsDeleted
+            });
+
+            var filteredBlogs = FilterBlogs(blogs, filterDto);
+            
+            var pagedBlogs = new PagedList<GetAllBlogsDto>(
+                source: filteredBlogs.OrderByDescending(_ => _.CreationDateTime),
+                pageNumber: pagingParams.PageNumber,
+                pageSize: pagingParams.PageSize);
+
+            return pagedBlogs;
         }
 
         public async Task<GetBlogDetailsDto?> GetDetails(
@@ -63,6 +91,52 @@ namespace BloggerSample.Infrastructure.Repositories
         {
             return await _blogs.AnyAsync(_ => _.Title == title && !_.IsDeleted,
                 cancellationToken);
+        }
+
+        private IQueryable<GetAllBlogsDto> FilterBlogs(
+            IQueryable<GetAllBlogsDto> blogs,
+            GetAllBlogsFilterDto? filterDto)
+        {
+            if (filterDto is not null)
+            {
+                blogs = FilterByTitle(blogs, filterDto.Title);
+
+                blogs = FilterByBody(blogs, filterDto.Body);
+
+                blogs = FilterByIsDeleted(blogs, filterDto.IsDeleted);
+            }
+
+            return blogs;
+        }
+
+        private IQueryable<GetAllBlogsDto> FilterByIsDeleted(
+            IQueryable<GetAllBlogsDto> blogs,
+            bool? isDeleted)
+        {
+            if (isDeleted is not null)
+                blogs = blogs.Where(_ => _.IsDeleted == isDeleted);
+
+            return blogs;
+        }
+
+        private IQueryable<GetAllBlogsDto> FilterByBody(
+            IQueryable<GetAllBlogsDto> blogs,
+            string? body)
+        {
+            if (!string.IsNullOrEmpty(body))
+                blogs = blogs.Where(_ => _.Body.Contains(body));
+
+            return blogs;
+        }
+
+        private IQueryable<GetAllBlogsDto> FilterByTitle(
+            IQueryable<GetAllBlogsDto> blogs,
+            string? title)
+        {
+            if (!string.IsNullOrEmpty(title))
+                blogs = blogs.Where(_ => _.Title.Contains(title));
+
+            return blogs;
         }
     }
 }

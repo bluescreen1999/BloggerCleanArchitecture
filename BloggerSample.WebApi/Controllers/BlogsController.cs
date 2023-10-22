@@ -5,6 +5,8 @@ using BloggerSample.Application.Blogs.Commands.Add;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using BloggerSample.Application.Common.Models;
+using BloggerSample.Application.Blogs.Queries.GetAll;
 
 namespace BloggerSample.WebApi.Controllers
 {
@@ -55,6 +57,44 @@ namespace BloggerSample.WebApi.Controllers
             var command = new DeleteBlogCommand() { Id = id };
             await _mediator.Send(command, cancellationToken);
             return NoContent();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PagedList<GetAllBlogsDto>>> Get(
+            [Required, FromQuery] PagingParams pagingParams,
+            [FromQuery] GetAllBlogsFilterDto filterDto,
+            CancellationToken cancellationToken)
+        {
+            var query = new GetAllBlogsQuery() { PagingParams = pagingParams, FilterDto = filterDto };
+            var pagedBlogs = await _mediator.Send(query, cancellationToken);
+
+            pagedBlogs.List.ForEach(_ => _.OperationLinks.AddRange(
+                new List<OperationLink>
+                {
+                    new OperationLink
+                    {
+                        Href = Url.Action(nameof(Get), ControllerContext.ActionDescriptor.ControllerName,
+                        new { _.Id }, Request.Scheme),
+                        Method = "Get",
+                        Rel = "Self"
+                    },
+                    new OperationLink
+                    {
+                        Href = Url.Action(nameof(Put), ControllerContext.ActionDescriptor.ControllerName,
+                        new { id = _.Id }, Request.Scheme),
+                        Method = "Put",
+                        Rel = "Update"
+                    },
+                    new OperationLink
+                    {
+                        Href = Url.Action(nameof(Delete), ControllerContext.ActionDescriptor.ControllerName,
+                        new { id = _.Id }, Request.Scheme),
+                        Method = "Delete",
+                        Rel = "Delete"
+                    }
+                }));
+
+            return Ok(pagedBlogs);
         }
     }
 }
