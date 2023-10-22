@@ -1,6 +1,6 @@
 ﻿using BloggerSample.Application.Common.Exceptions.Blogs;
-using BloggerSample.Application.Common.Interfaces;
 using BloggerSample.Application.Common.Persistence;
+using BloggerSample.Application.Common.Interfaces;
 using BloggerSample.Domain.Entities;
 
 namespace BloggerSample.Application.Blogs.Commands.Add
@@ -25,25 +25,38 @@ namespace BloggerSample.Application.Blogs.Commands.Add
             AddBlogDto addBlogDto,
             CancellationToken cancellationToken)
         {
-            if (await _blogRepository.IsTitleDuplicate(addBlogDto.title, cancellationToken))
-                throw new DuplicateTitleException(addBlogDto.title);
+            await GaurdAgainstDuplicateTitle(addBlogDto, cancellationToken);
 
             var currentDateTime = _dateTimeOffsetProvider.UtcNow;
-
-            Blog blog = new()
-            {
-                Id = Guid.NewGuid(),
-                Body = addBlogDto.title,
-                IsDeleted = false,
-                Title = addBlogDto.title,
-                CreationDateTime = currentDateTime
-            };
+            Blog blog = InitializeBlog(addBlogDto, currentDateTime);
 
             _blogRepository.Add(blog);
 
             await _unitOfWork.SaveChangesAsync();
 
             return blog.Id;
+        }
+
+        private async Task GaurdAgainstDuplicateTitle(
+            AddBlogDto addBlogDto,
+            CancellationToken cancellationToken)
+        {
+            if (await _blogRepository.IsTitleDuplicate(addBlogDto.title, cancellationToken))
+                throw new DuplicateTitleException(addBlogDto.title);
+        }
+
+        private static Blog InitializeBlog(
+            AddBlogDto addBlogDto,
+            DateTimeOffset currentDateTime)
+        {
+            return new()
+            {
+                Id = Guid.NewGuid(),
+                Title = addBlogDto.title,
+                Body = addBlogDto.body,
+                IsDeleted = false,
+                CreationDateTime = currentDateTime
+            };
         }
     }
 }

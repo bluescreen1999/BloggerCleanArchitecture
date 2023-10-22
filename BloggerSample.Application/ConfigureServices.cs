@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
 using MediatR;
+using BloggerSample.Application.Blogs.Queries.GetDetails;
 
 namespace BloggerSample.Application
 {
@@ -12,8 +13,8 @@ namespace BloggerSample.Application
         public static IServiceCollection AddApplicationConfigs(
             this IServiceCollection services)
         {
-            services.AddScoped<IAddBlogService, AddBlogService>();
-            
+            RegisterBlogServices(services);
+
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMediatR(_ =>
             {
@@ -24,6 +25,12 @@ namespace BloggerSample.Application
             });
 
             return services;
+        }
+
+        private static void RegisterBlogServices(IServiceCollection services)
+        {
+            services.AddScoped<IAddBlogService, AddBlogService>();
+            services.AddScoped<IGetBlogDetailsService, GetBlogDetailsService>();
         }
     }
 }
