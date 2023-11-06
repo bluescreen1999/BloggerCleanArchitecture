@@ -2,6 +2,11 @@ using BloggerSample.Infrastructure;
 using BloggerSample.Application;
 using BloggerSample.WebApi;
 using BloggerSample.WebApi.Filters;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using BloggerSample.Application.Blogs.Commands.Add;
+using BloggerSample.Application.Common.Models;
+using BloggerSample.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +26,20 @@ builder.Services
     .AddApplicationConfigs()
     .AddInfrastructureConfigs(builder.Configuration)
     .AddApiConfigs();
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
+{
+    builder.RegisterAssemblyTypes(typeof(AddBlogService).Assembly)
+        .AssignableTo<IService>()
+        .AsImplementedInterfaces()
+        .InstancePerLifetimeScope();
+
+    builder.RegisterAssemblyTypes(typeof(BlogRepository).Assembly)
+        .AssignableTo<IRepository>()
+        .AsImplementedInterfaces()
+        .InstancePerLifetimeScope();
+});
 
 builder.Services.AddControllers(options => options.Filters.Add<ApiExceptionFilterAttribute>());
 

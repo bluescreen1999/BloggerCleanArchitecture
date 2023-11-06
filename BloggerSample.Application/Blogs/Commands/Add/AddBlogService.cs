@@ -32,7 +32,7 @@ namespace BloggerSample.Application.Blogs.Commands.Add
 
             _blogRepository.Add(blog);
 
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return blog.Id;
         }

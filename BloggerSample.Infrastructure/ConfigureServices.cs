@@ -18,7 +18,7 @@ namespace BloggerSample.Infrastructure
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddScoped<IBlogRepository, BlogRepository>();
+            //services.AddScoped<IBlogRepository, BlogRepository>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration

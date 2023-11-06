@@ -16,7 +16,7 @@ namespace BloggerSample.Application
         public static IServiceCollection AddApplicationConfigs(
             this IServiceCollection services)
         {
-            RegisterBlogServices(services);
+            //RegisterBlogServices(services);
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMediatR(_ =>
@@ -30,13 +30,13 @@ namespace BloggerSample.Application
             return services;
         }
 
-        private static void RegisterBlogServices(IServiceCollection services)
-        {
-            services.AddScoped<IAddBlogService, AddBlogService>();
-            services.AddScoped<IGetBlogDetailsService, GetBlogDetailsService>();
-            services.AddScoped<IEditBlogService, EditBlogService>();
-            services.AddScoped<IDeleteBlogService, DeleteBlogService>();
-            services.AddScoped<IGetAllBlogsService, GetAllBlogsService>();
-        }
+        //private static void RegisterBlogServices(IServiceCollection services)
+        //{
+        //    services.AddScoped<IAddBlogService, AddBlogService>();
+        //    services.AddScoped<IGetBlogDetailsService, GetBlogDetailsService>();
+        //    services.AddScoped<IEditBlogService, EditBlogService>();
+        //    services.AddScoped<IDeleteBlogService, DeleteBlogService>();
+        //    services.AddScoped<IGetAllBlogsService, GetAllBlogsService>();
+        //}
     }
 }

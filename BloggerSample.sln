@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloggerSample.Domain", "BloggerSample.Domain\BloggerSample.Domain.csproj", "{CF76FBDB-3491-40F3-9028-1232A439B761}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloggerSample.Domain", "BloggerSample.Domain\BloggerSample.Domain.csproj", "{CF76FBDB-3491-40F3-9028-1232A439B761}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloggerSample.Application", "BloggerSample.Application\BloggerSample.Application.csproj", "{CFF8028A-C1A7-4052-8E75-A5DCC6505846}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloggerSample.Application", "BloggerSample.Application\BloggerSample.Application.csproj", "{CFF8028A-C1A7-4052-8E75-A5DCC6505846}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloggerSample.Infrastructure", "BloggerSample.Infrastructure\BloggerSample.Infrastructure.csproj", "{27B6F908-3005-4B8C-8BE4-A9D8E8FFE456}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloggerSample.Infrastructure", "BloggerSample.Infrastructure\BloggerSample.Infrastructure.csproj", "{27B6F908-3005-4B8C-8BE4-A9D8E8FFE456}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloggerSample.WebApi", "BloggerSample.WebApi\BloggerSample.WebApi.csproj", "{2D68D3CF-3E9F-4B97-8EE0-D91FD7FB2E7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloggerSample.WebApi", "BloggerSample.WebApi\BloggerSample.WebApi.csproj", "{2D68D3CF-3E9F-4B97-8EE0-D91FD7FB2E7B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{67B06C32-A996-4F62-8E9A-137E997A3081}"
 EndProject

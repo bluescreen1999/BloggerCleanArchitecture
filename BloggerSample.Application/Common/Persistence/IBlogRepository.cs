@@ -6,7 +6,7 @@ using BloggerSample.Domain.Entities;
 
 namespace BloggerSample.Application.Common.Persistence
 {
-    public interface IBlogRepository
+    public interface IBlogRepository : IRepository
     {
         void Add(Blog blog);
         Task<int> Delete(Guid id, CancellationToken cancellationToken);
