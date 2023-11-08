@@ -19,7 +19,7 @@ namespace BloggerSample.Application.Blogs.Commands.Edit
             Guid id,
             CancellationToken cancellationToken)
         {
-            await GuardAgainstDuplicateTitle(editBlogDto, cancellationToken);
+            await GuardAgainstDuplicateTitle(editBlogDto, id, cancellationToken);
 
             var affectedRows = await _blogRepository.Edit(id, cancellationToken, editBlogDto);
 
@@ -31,9 +31,10 @@ namespace BloggerSample.Application.Blogs.Commands.Edit
 
         private async Task GuardAgainstDuplicateTitle(
             EditBlogDto editBlogDto,
+            Guid id,
             CancellationToken cancellationToken)
         {
-            if (await _blogRepository.IsTitleDuplicate(editBlogDto.title, cancellationToken))
+            if (await _blogRepository.IsTitleDuplicate(editBlogDto.title, id, cancellationToken))
                 throw new DuplicateTitleException(editBlogDto.title);
         }
     }

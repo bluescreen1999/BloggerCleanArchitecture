@@ -14,5 +14,6 @@ namespace BloggerSample.Application.Common.Persistence
         Task<PagedList<GetAllBlogsDto>> GetAll(PagingParams pagingParams, GetAllBlogsFilterDto? filterDto, CancellationToken cancellationToken);
         Task<GetBlogDetailsDto> GetDetails(Guid id, CancellationToken cancellationToken);
         Task<bool> IsTitleDuplicate(string title, CancellationToken cancellationToken);
+        Task<bool> IsTitleDuplicate(string title, Guid id, CancellationToken cancellationToken);
     }
 }

@@ -93,6 +93,15 @@ namespace BloggerSample.Infrastructure.Repositories
                 cancellationToken);
         }
 
+        public async Task<bool> IsTitleDuplicate(
+            string title,
+            Guid id,
+            CancellationToken cancellationToken)
+        {
+            return await _blogs.AnyAsync(_ => _.Title == title &&
+            _.Id != id && !_.IsDeleted, cancellationToken);
+        }
+
         private IQueryable<GetAllBlogsDto> FilterBlogs(
             IQueryable<GetAllBlogsDto> blogs,
             GetAllBlogsFilterDto? filterDto)
@@ -138,5 +147,7 @@ namespace BloggerSample.Infrastructure.Repositories
 
             return blogs;
         }
+
+        
     }
 }
