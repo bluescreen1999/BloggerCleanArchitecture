@@ -1,12 +1,12 @@
 ﻿using BloggerSample.Application.Blogs.Queries.GetDetails;
 using BloggerSample.Application.Blogs.Commands.Delete;
+using BloggerSample.Application.Blogs.Queries.GetAll;
 using BloggerSample.Application.Blogs.Commands.Edit;
 using BloggerSample.Application.Blogs.Commands.Add;
+using BloggerSample.Application.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using BloggerSample.Application.Common.Models;
-using BloggerSample.Application.Blogs.Queries.GetAll;
 
 namespace BloggerSample.WebApi.Controllers
 {
@@ -68,7 +68,14 @@ namespace BloggerSample.WebApi.Controllers
             var query = new GetAllBlogsQuery() { PagingParams = pagingParams, FilterDto = filterDto };
             var pagedBlogs = await _mediator.Send(query, cancellationToken);
 
-            pagedBlogs.List.ForEach(_ => _.OperationLinks.AddRange(
+            AddLinksToPagedBlogs(pagedBlogs);
+
+            return Ok(pagedBlogs);
+        }
+
+        private void AddLinksToPagedBlogs(PagedList<GetAllBlogsDto> pagedBlogs)
+        {
+            pagedBlogs.Items.ToList().ForEach(_ => _.OperationLinks.AddRange(
                 new List<OperationLink>
                 {
                     new OperationLink
@@ -93,8 +100,6 @@ namespace BloggerSample.WebApi.Controllers
                         Rel = "Delete"
                     }
                 }));
-
-            return Ok(pagedBlogs);
         }
     }
 }

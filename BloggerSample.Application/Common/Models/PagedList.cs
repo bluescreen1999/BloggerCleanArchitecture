@@ -1,4 +1,6 @@
-﻿namespace BloggerSample.Application.Common.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BloggerSample.Application.Common.Models
 {
     public class PagingParams
     {
@@ -8,21 +10,37 @@
 
     public class PagedList<T>
     {
-        public PagedList(IQueryable<T> source, int pageNumber, int pageSize)
+        public PagedList(
+            int totalItems,
+            IReadOnlyCollection<T> items,
+            int pageNumber,
+            int pageSize)
         {
-            TotalItems = source.Count();
+            TotalItems = totalItems;
             PageNumber = pageNumber;
             PageSize = pageSize;
-            List = source
-                .Skip(pageSize * (pageNumber - 1))
+            Items = items;
+        }
+
+        public static async Task<PagedList<T>> Paginate(
+            IQueryable<T> source,
+            int pageNumber,
+            int pageSize,
+            CancellationToken cancellationToken)
+        {
+            var totalItems = await source.CountAsync();
+            var items = await source
+                .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToList();
+                .ToListAsync(cancellationToken);
+
+            return new PagedList<T>(totalItems, items, pageNumber, pageSize);
         }
 
         public int TotalItems { get; }
         public int PageNumber { get; }
         public int PageSize { get; }
-        public List<T> List { get; }
+        public IReadOnlyCollection<T> Items { get; }
         public int TotalPages =>
               (int)Math.Ceiling(TotalItems / (double)PageSize);
         public bool HasPreviousPage => PageNumber > 1;

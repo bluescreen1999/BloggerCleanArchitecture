@@ -17,7 +17,10 @@ namespace BloggerSample.Application.Blogs.Queries.GetAll
             GetAllBlogsQuery request,
             CancellationToken cancellationToken)
         {
-            return await _getAllBlogsService.Execute(request.PagingParams, request.FilterDto, cancellationToken);
+            return await _getAllBlogsService.Execute(
+                request.PagingParams,
+                request.FilterDto,
+                cancellationToken);
         }
     }
 }

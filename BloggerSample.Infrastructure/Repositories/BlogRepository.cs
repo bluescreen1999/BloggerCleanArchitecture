@@ -62,11 +62,12 @@ namespace BloggerSample.Infrastructure.Repositories
             });
 
             var filteredBlogs = FilterBlogs(blogs, filterDto);
-            
-            var pagedBlogs = new PagedList<GetAllBlogsDto>(
+
+            var pagedBlogs = await PagedList<GetAllBlogsDto>.Paginate(
                 source: filteredBlogs.OrderByDescending(_ => _.CreationDateTime),
                 pageNumber: pagingParams.PageNumber,
-                pageSize: pagingParams.PageSize);
+                pageSize: pagingParams.PageSize,
+                cancellationToken: cancellationToken);
 
             return pagedBlogs;
         }
@@ -147,7 +148,5 @@ namespace BloggerSample.Infrastructure.Repositories
 
             return blogs;
         }
-
-        
     }
 }
