@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using BloggerSample.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using BloggerSample.Application.Common.Models;
 
 namespace BloggerSample.Infrastructure
 {
@@ -19,6 +20,7 @@ namespace BloggerSample.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             //services.AddScoped<IBlogRepository, BlogRepository>();
+            services.AddScoped(typeof(IPaginationService<>), typeof(PaginationService<>));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration
