@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace BloggerSample.Application.Common.Models
+﻿namespace BloggerSample.Application.Common.Models
 {
     public class PagingParams
     {
