@@ -1,11 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace BloggerSample.Application.Common.Models
+﻿namespace BloggerSample.Application.Common.Models
 {
     public class PagingParams
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 5;
+    }
+
+    public interface IPaginationService<T>
+    {
+        Task<PagedList<T>> Paginate(
+            IQueryable<T> source,
+            int pageNumber,
+            int pageSize,
+            CancellationToken cancellationToken);
     }
 
     public class PagedList<T>
@@ -20,21 +27,6 @@ namespace BloggerSample.Application.Common.Models
             PageNumber = pageNumber;
             PageSize = pageSize;
             Items = items;
-        }
-
-        public static async Task<PagedList<T>> Paginate(
-            IQueryable<T> source,
-            int pageNumber,
-            int pageSize,
-            CancellationToken cancellationToken)
-        {
-            var totalItems = await source.CountAsync();
-            var items = await source
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync(cancellationToken);
-
-            return new PagedList<T>(totalItems, items, pageNumber, pageSize);
         }
 
         public int TotalItems { get; }
