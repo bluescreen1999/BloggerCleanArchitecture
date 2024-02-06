@@ -103,6 +103,12 @@ namespace BloggerSample.Infrastructure.Repositories
             _.Id != id && !_.IsDeleted, cancellationToken);
         }
 
+        public async Task<Blog?> FindById(Guid id, CancellationToken cancellationToken)
+        {
+            return await _blogs
+                .SingleOrDefaultAsync(_ => _.Id == id && !_.IsDeleted, cancellationToken);
+        }
+
         private IQueryable<GetAllBlogsDto> FilterBlogs(
             IQueryable<GetAllBlogsDto> blogs,
             GetAllBlogsFilterDto? filterDto)

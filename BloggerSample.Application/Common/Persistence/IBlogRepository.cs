@@ -15,5 +15,6 @@ namespace BloggerSample.Application.Common.Persistence
         Task<GetBlogDetailsDto> GetDetails(Guid id, CancellationToken cancellationToken);
         Task<bool> IsTitleDuplicate(string title, CancellationToken cancellationToken);
         Task<bool> IsTitleDuplicate(string title, Guid id, CancellationToken cancellationToken);
+        Task<Blog> FindById(Guid id, CancellationToken cancellationToken);
     }
 }

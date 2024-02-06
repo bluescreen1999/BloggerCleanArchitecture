@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.20.69" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BloggerSample.Application\BloggerSample.Application.csproj" />
+    <ProjectReference Include="..\BloggerSample.Infrastructure\BloggerSample.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

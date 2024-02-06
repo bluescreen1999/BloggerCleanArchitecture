@@ -8,10 +8,14 @@ namespace BloggerSample.Application.Blogs.Commands.Edit
     public sealed class EditBlogService : IEditBlogService
     {
         private readonly IBlogRepository _blogRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EditBlogService(IBlogRepository blogRepository)
+        public EditBlogService(
+            IBlogRepository blogRepository,
+            IUnitOfWork unitOfWork)
         {
             _blogRepository = blogRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<bool> Execute(
@@ -21,10 +25,15 @@ namespace BloggerSample.Application.Blogs.Commands.Edit
         {
             await GuardAgainstDuplicateTitle(editBlogDto, id, cancellationToken);
 
-            var affectedRows = await _blogRepository.Edit(id, cancellationToken, editBlogDto);
+            var blog = await _blogRepository.FindById(id, cancellationToken);
 
-            if (affectedRows == 0)
+            if (blog is null)
                 throw new NotFoundException(nameof(Blog), id);
+
+            blog.Title = editBlogDto.title;
+            blog.Body = editBlogDto.body;
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return true;
         }

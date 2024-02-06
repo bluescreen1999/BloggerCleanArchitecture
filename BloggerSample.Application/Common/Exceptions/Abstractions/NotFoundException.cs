@@ -3,7 +3,7 @@
     public sealed class NotFoundException : Exception
     {
         public NotFoundException(string entityName, Guid id)
-            : base($"{entityName.ToUpper()} With id: {id} Not Found")
+            : base($"{entityName} With id: {id} Not Found")
         {
 
         }

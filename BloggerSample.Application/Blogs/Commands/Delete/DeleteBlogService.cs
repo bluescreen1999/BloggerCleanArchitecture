@@ -7,18 +7,26 @@ namespace BloggerSample.Application.Blogs.Commands.Delete
     public sealed class DeleteBlogService : IDeleteBlogService
     {
         private readonly IBlogRepository _blogRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteBlogService(IBlogRepository blogRepository)
+        public DeleteBlogService(
+            IBlogRepository blogRepository,
+            IUnitOfWork unitOfWork)
         {
             _blogRepository = blogRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task Execute(Guid id, CancellationToken cancellationToken)
         {
-            var affectedRows = await _blogRepository.Delete(id, cancellationToken);
+            var blog = await _blogRepository.FindById(id, cancellationToken);
 
-            if (affectedRows == 0)
+            if (blog is null)
                 throw new NotFoundException(nameof(Blog), id);
+
+            blog.IsDeleted = true;
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }
