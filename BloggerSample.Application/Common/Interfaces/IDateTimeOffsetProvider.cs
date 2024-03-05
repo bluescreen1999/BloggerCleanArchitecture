@@ -1,7 +1,6 @@
-﻿namespace BloggerSample.Application.Common.Interfaces
+﻿namespace BloggerSample.Application.Common.Interfaces;
+
+public interface IDateTimeOffsetProvider
 {
-    public interface IDateTimeOffsetProvider
-    {
-        DateTimeOffset UtcNow { get; }
-    }
+    DateTimeOffset UtcNow { get; }
 }

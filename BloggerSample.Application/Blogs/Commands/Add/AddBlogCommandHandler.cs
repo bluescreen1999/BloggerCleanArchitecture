@@ -1,22 +1,21 @@
 ﻿using MediatR;
 
-namespace BloggerSample.Application.Blogs.Commands.Add
+namespace BloggerSample.Application.Blogs.Commands.Add;
+
+public sealed class AddBlogCommandHandler 
+    : IRequestHandler<AddBlogCommand, Guid>
 {
-    public sealed class AddBlogCommandHandler 
-        : IRequestHandler<AddBlogCommand, Guid>
+    private readonly IAddBlogService _addBlogService;
+
+    public AddBlogCommandHandler(IAddBlogService addBlogService)
     {
-        private readonly IAddBlogService _addBlogService;
+        _addBlogService = addBlogService;
+    }
 
-        public AddBlogCommandHandler(IAddBlogService addBlogService)
-        {
-            _addBlogService = addBlogService;
-        }
-
-        public async Task<Guid> Handle(
-            AddBlogCommand request, 
-            CancellationToken cancellationToken)
-        {
-            return await _addBlogService.Execute(request.AddBlogDto, cancellationToken);
-        }
+    public async Task<Guid> Handle(
+        AddBlogCommand request, 
+        CancellationToken cancellationToken)
+    {
+        return await _addBlogService.Execute(request.AddBlogDto, cancellationToken);
     }
 }

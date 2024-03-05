@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace BloggerSample.Application.Blogs.Commands.Add
+namespace BloggerSample.Application.Blogs.Commands.Add;
+
+public sealed class AddBlogCommand : IRequest<Guid>
 {
-    public sealed class AddBlogCommand : IRequest<Guid>
-    {
-        public AddBlogDto AddBlogDto { get; set; }
-    }
+    public AddBlogDto AddBlogDto { get; set; }
 }

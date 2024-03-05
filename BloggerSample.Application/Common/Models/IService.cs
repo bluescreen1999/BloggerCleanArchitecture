@@ -1,6 +1,5 @@
-﻿namespace BloggerSample.Application.Common.Models
+﻿namespace BloggerSample.Application.Common.Models;
+
+public interface IService
 {
-    public interface IService
-    {
-    }
 }

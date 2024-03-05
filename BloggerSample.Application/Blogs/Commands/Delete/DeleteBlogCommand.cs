@@ -1,9 +1,9 @@
 ﻿using MediatR;
 
-namespace BloggerSample.Application.Blogs.Commands.Delete
+namespace BloggerSample.Application.Blogs.Commands.Delete;
+
+public sealed class DeleteBlogCommand : IRequest
 {
-    public sealed class DeleteBlogCommand : IRequest
-    {
-        public required Guid Id { get; set; }
-    }
+    public required Guid Id { get; set; }
 }
+

@@ -9,34 +9,33 @@ using MediatR;
 using BloggerSample.Application.Blogs.Commands.Delete;
 using BloggerSample.Application.Blogs.Queries.GetAll;
 
-namespace BloggerSample.Application
+namespace BloggerSample.Application;
+
+public static class ConfigureServices
 {
-    public static class ConfigureServices
+    public static IServiceCollection AddApplicationConfigs(
+        this IServiceCollection services)
     {
-        public static IServiceCollection AddApplicationConfigs(
-            this IServiceCollection services)
+        //RegisterBlogServices(services);
+
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddMediatR(_ =>
         {
-            //RegisterBlogServices(services);
+            _.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            _.AddBehavior(
+                typeof(IPipelineBehavior<,>),
+                typeof(ValidationBehaviour<,>));
+        });
 
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddMediatR(_ =>
-            {
-                _.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                _.AddBehavior(
-                    typeof(IPipelineBehavior<,>),
-                    typeof(ValidationBehaviour<,>));
-            });
-
-            return services;
-        }
-
-        //private static void RegisterBlogServices(IServiceCollection services)
-        //{
-        //    services.AddScoped<IAddBlogService, AddBlogService>();
-        //    services.AddScoped<IGetBlogDetailsService, GetBlogDetailsService>();
-        //    services.AddScoped<IEditBlogService, EditBlogService>();
-        //    services.AddScoped<IDeleteBlogService, DeleteBlogService>();
-        //    services.AddScoped<IGetAllBlogsService, GetAllBlogsService>();
-        //}
+        return services;
     }
+
+    //private static void RegisterBlogServices(IServiceCollection services)
+    //{
+    //    services.AddScoped<IAddBlogService, AddBlogService>();
+    //    services.AddScoped<IGetBlogDetailsService, GetBlogDetailsService>();
+    //    services.AddScoped<IEditBlogService, EditBlogService>();
+    //    services.AddScoped<IDeleteBlogService, DeleteBlogService>();
+    //    services.AddScoped<IGetAllBlogsService, GetAllBlogsService>();
+    //}
 }

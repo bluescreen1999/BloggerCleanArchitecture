@@ -1,7 +1,6 @@
-﻿namespace BloggerSample.Application.Common.Persistence
+﻿namespace BloggerSample.Application.Common.Persistence;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        Task SaveChangesAsync(CancellationToken cancellationToken = default);
-    }
+    Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }

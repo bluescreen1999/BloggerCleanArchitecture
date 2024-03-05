@@ -1,9 +1,9 @@
 ﻿using BloggerSample.Application.Common.Models;
 
-namespace BloggerSample.Application.Blogs.Commands.Add
+namespace BloggerSample.Application.Blogs.Commands.Add;
+
+public interface IAddBlogService: IService
 {
-    public interface IAddBlogService: IService
-    {
-        Task<Guid> Execute(AddBlogDto addBlogDto, CancellationToken cancellationToken);
-    }
+    Task<Guid> Execute(AddBlogDto addBlogDto, CancellationToken cancellationToken);
 }
+
