@@ -11,13 +11,10 @@ namespace BloggerSample.Infrastructure.Repositories
     public sealed class BlogRepository : IBlogRepository
     {
         private readonly DbSet<Blog> _blogs;
-        private readonly IPaginationService<GetAllBlogsDto> _paginationService;
 
-        public BlogRepository(ApplicationDbContext context, 
-            IPaginationService<GetAllBlogsDto> paginationService)
+        public BlogRepository(ApplicationDbContext context)
         {
             _blogs = context.Set<Blog>();
-            _paginationService = paginationService;
         }
 
         public void Add(Blog blog)
@@ -66,7 +63,7 @@ namespace BloggerSample.Infrastructure.Repositories
 
             var filteredBlogs = FilterBlogs(blogs, filterDto);
 
-            var pagedBlogs = await _paginationService.Paginate(
+            var pagedBlogs = await PagedList<GetAllBlogsDto>.Paginate(
                 source: filteredBlogs.OrderByDescending(_ => _.CreationDateTime),
                 pageNumber: pagingParams.PageNumber,
                 pageSize: pagingParams.PageSize,
